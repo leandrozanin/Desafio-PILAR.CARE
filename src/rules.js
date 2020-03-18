@@ -9,7 +9,7 @@ const randonComputer = () => {
 };
 
 const checkWins = ( user = randonComputer() , computer = randonComputer()  ) => {
-    
+
     if ( computer.win.includes(user.key) ) 
         return 'computer';
         
@@ -22,4 +22,15 @@ const checkWins = ( user = randonComputer() , computer = randonComputer()  ) => 
     return 'bug';    
 }
 
-module.exports = { options: optionsGame, computerOption: randonComputer,  wins: checkWins   };
+const getUser = ( filter ) => {
+    for (let i = 0; i < optionsGame.length; i++) 
+        if (optionsGame[i].key == filter)
+            return optionsGame[i];
+}
+
+module.exports = { 
+    options: optionsGame, 
+    computerOption: randonComputer,  
+    wins: checkWins, 
+    user:getUser   
+};

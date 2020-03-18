@@ -11,13 +11,14 @@ html(lang='pt')
       h1 PILAR.CARE
     #content-play
       .gameExecuting
-        .computer
-        .user
+        #computer.computer
+        #user.user
       #content-anim
+      #content-msg
       .controls
-        button.pedra
-          img(src="static/img/pedra.png", alt="pedra", srcset="")  
-        button.papel
-          img(src="static/img/papel.png", alt="papel", srcset="")  
-        button.tesoura
-          img(src="static/img/tesoura.png", alt="tesoura", srcset="")  
+        button.pedra(onclick="play('pedra')")
+          img(src="static/img/pedra.png", alt="pedra")  
+        button.papel(onclick="play('papel')")
+          img(src="static/img/papel.png", alt="papel")  
+        button.tesoura(onclick="play('tesoura')")
+          img(src="static/img/tesoura.png", alt="tesoura")  
