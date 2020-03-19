@@ -65,9 +65,9 @@ app.put('/play', function (req, res) {
     });
 });
 
-app.post('/mode/:mode', function (req, res) {
+app.post('/mode', function (req, res) {
     const session = req.session;
-    session.modeGame = parseInt(req.params.mode);
+    session.modeGame = parseInt( req.body.mode );
     res.json( {  mode: session.modeGame  } );
 });
 

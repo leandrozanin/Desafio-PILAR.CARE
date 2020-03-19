@@ -1,3 +1,5 @@
+var dataReturn = {};
+
 function addEvent(to, type, fn){ 
     if(document.addEventListener){
         to.addEventListener(type, fn, false);
@@ -28,17 +30,23 @@ function anim( name ){
     } );
 }
 
+
+function setMode( mode ){
+    fetch(`/mode`, {
+        method: 'PUT', 
+        headers:{ 'content-type': 'application/json' }, 
+        body: JSON.stringify( { mode: mode } ) 
+     })
+    .then( (response) => response.json() )
+    .then( (response) => console.log( response ) )
+}
+
 function clear(){
     findElement('#computer').innerHTML= "";
     findElement('#user').innerHTML= "";
     findElement('#content-anim').innerHTML= "";
 }
 
-function setMode( mode ){
-    fetch(`/mode/${mode}`, {method: 'POST'})
-    .then( (response) => response.json() )
-    .then( (response) => console.log( response ) )
-}
 
 
 function play( element ){
@@ -46,12 +54,57 @@ function play( element ){
 
     var data = new FormData();
     data.append('element', element);
-    fetch(`/play`, {method: 'PUT', headers:{ 'content-type': 'application/json' }, body: JSON.stringify( { element: element } )  })
+    fetch(`/play`, {
+        method: 'PUT', 
+        headers:{ 'content-type': 'application/json' }, 
+        body: JSON.stringify( { element: element } ) 
+     })
     .then( (response) => response.json() )
     .then( (response) => { console.log( response ); checkWins( response );  } );
 }
 
+function mountHistory(){
+    const hist = dataReturn.history;
+    const dataMap = hist.map( (item, i) => { 
+        var user = 0;
+        var computer =0;
+        for (let i = 0; i < item.matches.length; i++) 
+            if ( item.matches[i] == 'user' )
+                user++;
+            else if ( item.matches[i] == 'computer' )
+                computer++; 
+
+        return {
+            wins: user > computer ? 'user' : 'computer',
+            scoreboard: { 
+                user:user, 
+                computer: computer 
+            }, 
+            date: item.date 
+        }         
+    });
+   
+    console.log( dataMap );
+    calcScoreboard(dataMap);
+
+}
+
+function calcScoreboard(score){
+    var user = 0;
+    var computer = 0;
+    for (let i = 0; i < score.length; i++) 
+        if ( score[i].wins == 'user' )
+            user++;
+        else if ( score[i].wins == 'computer' )
+            computer++; 
+
+    findElement('#content-scoreboard').innerHTML = `${computer} x ${user}`;       
+}
+
 function checkWins( obj ){
+    dataReturn = obj;
+    mountHistory();
+    
     findElement('#computer').innerHTML= "<img src=\"static/img/"+obj.computerSelect.key+".png\">";
     findElement('#user').innerHTML= "<img src=\"static/img/"+obj.userSelect.key+".png\">";
 
@@ -71,10 +124,14 @@ function checkWins( obj ){
         break;
     }
 
-   // obj.computerSelect.key
 }
 
 
 function showMessage( msg ){
     findElement('#content-msg').innerHTML = `<b class="msg">${msg}</b>`;
+}
+
+function openMenu(){
+    findElement('#content-msg').innerHTML = '';
+    findElement("#main").classList.toggle("open-menu");
 }
