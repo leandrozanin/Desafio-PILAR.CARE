@@ -1,3 +1,3 @@
 # Desafio-PILAR.CARE
-Entrevista de Trabalho
-jogo de pedra papel e tesoura
+# Entrevista de Trabalho
+# GAME Pedra, papel e tesoura, também chamado em algumas regiões do Brasil de jokempô
